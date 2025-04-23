@@ -2,6 +2,7 @@ import Admin from "../models/admin.js";
 import { adminValid } from "../utils/admin.valid.js";
 import { decode, encode } from "../utils/bcrypt.js";
 import { catchError } from "../utils/error.js";
+import { generatAccessToken, refreshToken } from "../utils/generat.js";
 
 export class AdminServics {
     async sigIn(req, res) {
@@ -39,10 +40,13 @@ export class AdminServics {
             if(!isMatchPassword){
                 throw new Error("Invalid password");
             }
+            const payload = { id: admin._id, role: admin.role };
+            const accesstoken = generatAccessToken(payload);
+            const refreshtoken = refreshToken(payload);
             return res.status(201).json({
                 statusCode: 201,
                 message: 'success',
-                data: admin
+                data: accesstoken, refreshtoken
             });
         } catch (error) {
             catchError(error, res);

@@ -24,11 +24,11 @@ export class UserServecis {
     }
     async getAll(req, res) {
         try {
-            const users = await User.find();
+            const user = await User.find();
             return res.status(200).json({
                 statusCode: 200,
                 message: 'success',
-                data: users
+                data: user
             });
         } catch (error) {
             catchError(error, res);
